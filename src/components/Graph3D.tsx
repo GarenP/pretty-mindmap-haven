@@ -38,11 +38,12 @@ export function Graph3D({ notes, onNodeClick }: Graph3DProps) {
       )
     };
 
-    // Initialize ForceGraph3D with the container element
-    const Graph = ForceGraph3D({ controlType: 'orbit' })(containerRef.current);
+    // Initialize ForceGraph3D instance
+    const Graph = new ForceGraph3D();
+    const graphInstance = Graph(containerRef.current);
     
     // Configure the graph
-    Graph
+    graphInstance
       .graphData(graphData)
       .nodeLabel('name')
       .nodeColor('color')
@@ -53,7 +54,7 @@ export function Graph3D({ notes, onNodeClick }: Graph3DProps) {
         onNodeClick(node.note);
         const distance = 40;
         const distRatio = 1 + distance/Math.hypot(node.x, node.y, node.z);
-        Graph.cameraPosition(
+        graphInstance.cameraPosition(
           { x: node.x * distRatio, y: node.y * distRatio, z: node.z * distRatio },
           node,
           3000
@@ -64,19 +65,19 @@ export function Graph3D({ notes, onNodeClick }: Graph3DProps) {
       });
 
     // Add ambient light and other configurations
-    Graph
+    graphInstance
       .backgroundColor('#00000000')
       .showNavInfo(false)
       .linkDirectionalParticles(2)
       .linkDirectionalParticleWidth(0.8)
       .linkDirectionalParticleSpeed(0.006);
 
-    graphRef.current = Graph;
+    graphRef.current = graphInstance;
 
     // Handle window resize
     const handleResize = () => {
-      Graph.width(containerRef.current!.clientWidth);
-      Graph.height(containerRef.current!.clientHeight);
+      graphInstance.width(containerRef.current!.clientWidth);
+      graphInstance.height(containerRef.current!.clientHeight);
     };
     window.addEventListener('resize', handleResize);
 
