@@ -38,7 +38,9 @@ export function Graph3D({ notes, onNodeClick }: Graph3DProps) {
       )
     };
 
-    graphRef.current = ForceGraph3D()(containerRef.current)
+    // Create a new instance of ForceGraph3D
+    const Graph = new ForceGraph3D();
+    graphRef.current = Graph(containerRef.current)
       .graphData(graphData)
       .nodeLabel('name')
       .nodeColor('color')
