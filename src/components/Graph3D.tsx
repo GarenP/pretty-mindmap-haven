@@ -33,17 +33,17 @@ export function Graph3D({ notes, onNodeClick }: Graph3DProps) {
         note.connections.map(targetId => ({
           source: note.id,
           target: targetId,
-          color: '#ffffff20'
+          color: '#ffffff40'
         }))
       )
     };
 
-    const graphInstance = new ForceGraph3D()(containerRef.current)
+    const graphInstance = ForceGraph3D()(containerRef.current)
       .graphData(graphData)
       .nodeLabel('name')
       .nodeColor('color')
       .nodeRelSize(6)
-      .linkWidth(0.5)
+      .linkWidth(1)
       .linkColor('color')
       .onNodeClick(node => {
         onNodeClick(node.note);
@@ -60,9 +60,28 @@ export function Graph3D({ notes, onNodeClick }: Graph3DProps) {
       })
       .backgroundColor('#00000000')
       .showNavInfo(false)
-      .linkDirectionalParticles(2)
-      .linkDirectionalParticleWidth(0.8)
-      .linkDirectionalParticleSpeed(0.006);
+      // Enhanced particle effects
+      .linkDirectionalParticles(4)
+      .linkDirectionalParticleWidth(2)
+      .linkDirectionalParticleSpeed(0.004)
+      .linkDirectionalParticleColor(() => '#ffffff')
+      .linkDirectionalArrowLength(3.5)
+      .linkDirectionalArrowRelPos(1)
+      .linkDirectionalParticleResolution(8)
+      // Add glow effect to particles
+      .nodeThreeObject(node => {
+        const sprite = new THREE.Sprite(
+          new THREE.SpriteMaterial({
+            map: new THREE.TextureLoader().load('/glow.png'),
+            color: node.color,
+            transparent: true,
+            opacity: 0.6,
+            blending: THREE.AdditiveBlending
+          })
+        );
+        sprite.scale.set(8, 8, 1);
+        return sprite;
+      });
 
     graphRef.current = graphInstance;
 
