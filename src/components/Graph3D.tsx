@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import ForceGraph3D from '3d-force-graph';
 import { Note } from '@/lib/generateNotes';
 import { useToast } from '@/components/ui/use-toast';
@@ -38,12 +38,7 @@ export function Graph3D({ notes, onNodeClick }: Graph3DProps) {
       )
     };
 
-    // Initialize ForceGraph3D with the container element
-    const Graph = ForceGraph3D();
-    const graphInstance = Graph(containerRef.current);
-    
-    // Configure the graph
-    graphInstance
+    const graphInstance = new ForceGraph3D()(containerRef.current)
       .graphData(graphData)
       .nodeLabel('name')
       .nodeColor('color')
@@ -62,10 +57,7 @@ export function Graph3D({ notes, onNodeClick }: Graph3DProps) {
       })
       .onNodeHover(node => {
         containerRef.current!.style.cursor = node ? 'pointer' : 'default';
-      });
-
-    // Add ambient light and other configurations
-    graphInstance
+      })
       .backgroundColor('#00000000')
       .showNavInfo(false)
       .linkDirectionalParticles(2)
@@ -74,7 +66,6 @@ export function Graph3D({ notes, onNodeClick }: Graph3DProps) {
 
     graphRef.current = graphInstance;
 
-    // Handle window resize
     const handleResize = () => {
       graphInstance.width(containerRef.current!.clientWidth);
       graphInstance.height(containerRef.current!.clientHeight);
