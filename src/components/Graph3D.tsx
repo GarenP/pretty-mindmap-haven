@@ -62,7 +62,6 @@ export function Graph3D({ notes, onNodeClick }: Graph3DProps) {
       })
       .backgroundColor('#00000000')
       .showNavInfo(false)
-      // Enhanced particle effects
       .linkDirectionalParticles(4)
       .linkDirectionalParticleWidth(2)
       .linkDirectionalParticleSpeed(0.004)
@@ -70,19 +69,35 @@ export function Graph3D({ notes, onNodeClick }: Graph3DProps) {
       .linkDirectionalArrowLength(3.5)
       .linkDirectionalArrowRelPos(1)
       .linkDirectionalParticleResolution(8)
-      // Add glow effect to particles
       .nodeThreeObject(node => {
+        // Create a group to hold both sphere and glow
+        const group = new THREE.Group();
+
+        // Add the actual sphere for the node
+        const sphere = new THREE.Mesh(
+          new THREE.SphereGeometry(4),
+          new THREE.MeshPhongMaterial({ 
+            color: node.color,
+            transparent: true,
+            opacity: 0.8
+          })
+        );
+        group.add(sphere);
+
+        // Add the glow effect
         const sprite = new THREE.Sprite(
           new THREE.SpriteMaterial({
             map: new THREE.TextureLoader().load('/glow.png'),
             color: node.color,
             transparent: true,
-            opacity: 0.6,
+            opacity: 0.4,
             blending: THREE.AdditiveBlending
           })
         );
-        sprite.scale.set(8, 8, 1);
-        return sprite;
+        sprite.scale.set(12, 12, 1);
+        group.add(sprite);
+
+        return group;
       });
 
     graphRef.current = graphInstance;
