@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import ForceGraph3D from '3d-force-graph';
 import { Note } from '@/lib/generateNotes';
 import { useToast } from '@/components/ui/use-toast';
+import * as THREE from 'three';
 
 interface Graph3DProps {
   notes: Note[];
@@ -38,7 +39,8 @@ export function Graph3D({ notes, onNodeClick }: Graph3DProps) {
       )
     };
 
-    const graphInstance = ForceGraph3D()(containerRef.current)
+    const Graph = ForceGraph3D();
+    const graphInstance = Graph(containerRef.current)
       .graphData(graphData)
       .nodeLabel('name')
       .nodeColor('color')
