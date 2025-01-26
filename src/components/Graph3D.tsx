@@ -38,8 +38,8 @@ export function Graph3D({ notes, onNodeClick }: Graph3DProps) {
       )
     };
 
-    // Initialize ForceGraph3D instance
-    const Graph = new ForceGraph3D();
+    // Initialize ForceGraph3D with the container element
+    const Graph = ForceGraph3D();
     const graphInstance = Graph(containerRef.current);
     
     // Configure the graph
